@@ -5,6 +5,17 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
+  {
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "skipLibCheck": true,
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    }
+  }
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
