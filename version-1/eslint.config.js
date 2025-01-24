@@ -15,7 +15,7 @@ export default [
         "@/*": ["./src/*"]
       }
     }
-  }
+  },
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],

@@ -1,4 +1,4 @@
-[
+let countryData =[ 
     {
       "name": {
         "common": "South Georgia",
@@ -25957,3 +25957,4 @@
       "capitalInfo": { "latlng": [18.22, -63.05] }
     }
   ]
+export default countryData
