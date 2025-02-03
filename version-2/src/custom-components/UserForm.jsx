@@ -26,6 +26,9 @@ function UserForm() {
     // Reset the form
     
   };
+  const handleBack = () => {
+    window.history.back(); // Go back to the previous page
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -73,6 +76,9 @@ function UserForm() {
 
       <div className="button-wrapper">
         <input type="submit" id="submit" value="Submit" />
+        <button type="button" onClick={handleBack} className="back-btn">
+          Back
+        </button>
       </div>
     </form>
   );
