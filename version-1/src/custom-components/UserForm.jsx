@@ -1,26 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function UserForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    country: '',
-    bio: '',
+  const [formData, setFormData] = useState(() => {
+    // Retrieve initial data from local storage if available
+    const savedData = localStorage.getItem('userFormData');
+    return savedData
+      ? JSON.parse(savedData)
+      : { name: '', email: '', country: '', bio: '' };
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    setFormData((prevFormData) => {
+      const updatedFormData = { ...prevFormData, [name]: value };
+      localStorage.setItem('userFormData', JSON.stringify(updatedFormData)); 
+      // Update local storage
+      return updatedFormData;
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const dataObj = formData;
-    console.log(dataObj);
+    console.log('Submitted Data:', formData);
     setFormData({ name: '', email: '', country: '', bio: '' }); 
     // Reset the form
-    // send dataObj to backend
+    
+  };
+  const handleBack = () => {
+    window.history.back(); // Go back to the previous page
   };
 
   return (
@@ -69,10 +76,12 @@ function UserForm() {
 
       <div className="button-wrapper">
         <input type="submit" id="submit" value="Submit" />
+        <button type="button" onClick={handleBack} className="back-btn">
+          Back
+        </button>
       </div>
     </form>
   );
 }
 
 export default UserForm;
-
