@@ -1,5 +1,5 @@
 import '../App.css'
-import { Button, Card, Image, Text } from "@chakra-ui/react"
+import { Card, Image } from "@chakra-ui/react"
 import { Routes, Route, Link } from 'react-router-dom';
 
 const CountryCard = ({ country }) => {
@@ -13,7 +13,6 @@ const CountryCard = ({ country }) => {
       <Card.Description>Population:{country.population}</Card.Description>
       <Card.Description>Region: {country.region}</Card.Description>
       <Card.Description>Capital: {country.capital}</Card.Description>
-      <Button>Save</Button>
     </Card.Root>
     </Link>
   );
