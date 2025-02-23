@@ -1,0 +1,11 @@
+select * from crime_scene_report;
+select type from crime_scene_report where type = 'murder'; 
+select * from crime_scene_report where type = 'murder' and city = 'SQL City'; 
+Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". The second witness, named Annabel, lives somewhere on "Franklin Ave".
+Someone killed the guard! He took an arrow to the knee!
+20180215 date
+select * from person;
+select * from facebook_event_checkin;
+select * from facebook_event_checkin where date = '20180215';
+select * from person where address_street_name = 'Northwestern Dr' or address_street_name = 'Franklin Ave';
+select * from person where name = 'Annabel' or address_street_name = 'Franklin Ave';
