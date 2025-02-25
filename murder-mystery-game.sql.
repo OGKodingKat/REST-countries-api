@@ -9,3 +9,10 @@ select * from facebook_event_checkin;
 select * from facebook_event_checkin where date = '20180215';
 select * from person where address_street_name = 'Northwestern Dr' or address_street_name = 'Franklin Ave';
 select * from person where name = 'Annabel' or address_street_name = 'Franklin Ave';
+SELECT * FROM person WHERE name LIKE '%Annabel%' AND address_street_name = "Franklin Ave";
+SELECT * FROM interview WHERE person_id IN ("14887", "16371");
+SELECT * FROM get_fit_now_check_in WHERE membership_id LIKE '48Z%' AND check_in_date = "20180109";
+SELECT * FROM drivers_license WHERE gender = "male" AND plate_number LIKE '%H42W%';
+SELECT * FROM person WHERE license_id IN ("423327", "664760");
+SELECT * FROM get_fit_now_member WHERE person_id IN ("51739", "67318");
+Murderer is Jeremy Bowers
