@@ -3,6 +3,15 @@ import pg from 'pg';
 const { Client } = pg
 import config from './config.js'; // internal module for connecting to our config file
 
+let config = {
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.DATABASE_PORT,
+  ssl: true
+}
+
 const app = express();
 const port = 3000;
 
