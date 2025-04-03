@@ -3,14 +3,14 @@ import pg from 'pg';
 const { Client } = pg
 import config from './config.js'; // internal module for connecting to our config file
 
-let config = {
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.DATABASE_PORT,
-  ssl: true
-}
+// let config = {
+//   user: process.env.USER,
+//   host: process.env.HOST,
+//   database: process.env.DATABASE,
+//   password: process.env.PASSWORD,
+//   port: process.env.DATABASE_PORT,
+//   ssl: true
+// }
 
 const app = express();
 const port = 3000;
@@ -22,108 +22,91 @@ app.use(express.json());
 const client = new Client(config);
 client.connect();
 
-// Helper functions
-const createUser = async (name, email, country, bio) => {
-  try {
-    const result = await client.query(
-      'INSERT INTO users (name, email, country, bio) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, email, country, bio]
-    );
-    return result.rows[0];
-  } catch (error) {
-    console.error('Error creating user:', error);
-    throw error;
-  }
-};
-
-const getUsers = async () => {
-  try {
-    const result = await client.query('SELECT * FROM users');
-    return result.rows;
-  } catch (error) {
-    console.error('Error retrieving users:', error);
-    throw error;
-  }
-};
-
-// Fetch all saved countries
-const getSavedCountries = async () => {
-  try {
-    const result = await client.query('SELECT * FROM saved_countries');
-    return result.rows;
-  } catch (error) {
-    console.error('Error fetching saved countries:', error);
-    throw error;
-  }
-};
-
-// Add a new country
-const addSavedCountry = async (name, flag) => {
-  try {
-    const result = await client.query(
-      'INSERT INTO saved_countries (name, flag) VALUES ($1, $2) RETURNING *',
-      [name, flag]
-    );
-    return result.rows[0];
-  } catch (error) {
-    console.error('Error saving country:', error);
-    throw error;
-  }
-};
-
-const clickCountry = async (country) => {
-  try {
-    const result = await client.query(
-      'INSERT INTO visit_counts (country_name, count) VALUES )($1, 1) ON CONFLICT (country_name) DO UPDATE SET count = visit_counts.count + 1 RETURNING count',
-      [country]
-    );
-    await client.end();
-    return result.rows[0].count;
-  } catch (error) {
-    console.error('Error updating visit count:', error);
-    throw error;
-  }
-};
-
-// API Endpoints
-
+// API Endpoint: Create a new user
+// This function inserts a new user into the database
+// using the provided user data.
+async function addUser(userData) {
+  const client = new Client(config);
+  await client.connect();
+  await client.query(`INSERT INTO users (name, email, country, bio) VALUES ('${userData.name}', '${userData.email}', '${userData.country}', '${userData.bio}')`);
+  await client.end();
+}
 //Create a new user
 app.post('/add-user', async (req, res) => {
-  const { name, email, country, bio } = req.body;
-  try {
-    const user = await createUser(name, email, country, bio);
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating user' });
-  }
+ await addUser (req.body);
+ res.send('User added');
 });
 
-// Get all users
-app.get('/users', async (req, res) => {
-  try {
-    const users = await getUsers();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ error: 'Error retrieving users' });
-  }
-});
+// API Endpoint: Get all users
+// This function fetches all users from the database
+// and returns them as a JSON response.
+async function getAllUsers() {
+  const client = new Client(config);
+  await client.connect();
+  const result = await client.query(`SELECT * FROM users`);
+  await client.end();
+  return result.rows;
+}
 
+//Get all users
+app.get('/get-all-users', async (req, res) => {
+  const users = await getAllUsers();
+  res.send(users);
+})
 
+async function getSavedCountries() {
+  const client = new Client(config);
+  await client.connect();
+  const result = await client.query(`SELECT * FROM countries`);
+  await client.end();
+};
 
-// Get all saved countries
 app.get('/saved-countries', async (req, res) => {
-  try {
-    const countries = await getSavedCountries();
-    res.status(200).json(countries);
-  } catch (error) {
-    res.status(500).json({ error: 'Error retrieving saved countries' });
-  }
+  const countries = await getSavedCountries();
+  res.send('Countries fetched');
 });
 
+async function addSavedCountry(countryData) {
+  const client = new Client(config);
+  await client.connect();
+  await client.query(`INSERT INTO countries (name, flag) VALUES ('${countryData.name}', '${countryData.flag}')`);
+  await client.end();
+};
 
-// API Endpoint: Get visit count
-app.post('/visit-count', async (req, res) => {});
+app.post('/saved-countries', async (req, res) => {
+  await addSavedCountry(req.body);
+  res.send('Country added');
+});
 
+// async function clickCount(country) {
+//   const client = new Client(config);
+//   await client.connect();
+//   const result = await client.query(`INSERT INTO visit_counts ()`)
+// }
+
+
+app.post("/country-clicked/:country", async (req, res) => {
+  let country = req.params.country;
+  let click = await updateClick(country);
+  let JSONclick = JSON.stringify(click);
+  res.send(JSONclick);
+});
+
+async function updateClick(country) {
+  const client = new Client(config);
+  await client.connect();
+  const result = await client.query(
+    `INSERT INTO visit_counts (country_name, count) 
+  VALUES ($1, 1)
+  ON CONFLICT (country_name) 
+  DO UPDATE SET count = visit_counts.count + 1 WHERE visit_counts.country_name = $1
+  RETURNING count`,
+    [country]
+  );
+  await client.end();
+  console.log(result);
+  return result.rows[0].count;
+};
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

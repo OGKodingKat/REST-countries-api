@@ -12,9 +12,10 @@ CREATE TABLE saved_countries (
     country_name VARCHAR(100) NOT NULL,
 );
 
-CREATE TABLE country_counts (
-    country_name VARCHAR(100) PRIMARY KEY,
-    save_count INT DEFAULT 0
+CREATE TABLE visit_counts (
+    country_id SERIAL PRIMARY KEY,
+    country_name VARCHAR(100) UNIQUE NOT NULL,
+    count INT DEFAULT 1
 );
 
 INSERT INTO users (username, email) VALUES
@@ -30,7 +31,7 @@ INSERT INTO saved_countries (user_id, country_name) VALUES
 (3, 'Brazil'),
 (3, 'Japan');
 
-INSERT INTO country_counts (country_name, save_count) VALUES
+INSERT INTO visit_counts (country_name, count) VALUES
 ('Japan', 3),
 ('France', 1),
 ('Germany', 1),
