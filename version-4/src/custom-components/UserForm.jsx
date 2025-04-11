@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 function UserForm() {
+  const [userName, setUserName] = useState(null);
   const [formData, setFormData] = useState(() => {
     // Retrieve initial data from local storage if available
     const savedData = localStorage.getItem('userFormData');
@@ -9,44 +10,42 @@ function UserForm() {
       : { name: '', email: '', country: '', bio: '' };
   });
 
-  useEffect(() => {
-    // Fetch initial data from the server
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/userFormData');
-        if (response.ok) {
-          const data = await response.json();
-          setFormData(data);
-        } else {
-          console.error('Failed to fetch data from server');
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+const addUser = async (userData) => {
+  const response = await fetch('/api/add-user', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(userData),
+  });
+  }
 
-    fetchData();
-  }, []);
+
+
+  const getUser = async () => {
+    const response = await fetch('/api/get-all-users');
+    const data = await response.json();
+    console.log('Fetched users:', data);
+    console.log('username fetched', data.name)
+    console.log('username fetch', data[data.length - 1].name);
+    setUserName(data[data.length - 1].name);
+  };
+  useEffect(() => {
+    getUser();
+  }, [userName]);
+  // Fetch user data from the server
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => {
       const updatedFormData = { ...prevFormData, [name]: value };
-
-      // Optionally, send updated data to the server
-      fetch('http://localhost:3000/userFormData', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedFormData),
-      }).catch((error) => console.error('Error updating data:', error));
-
+      localStorage.setItem('userFormData', JSON.stringify(updatedFormData)); 
+      // Update local storage
       return updatedFormData;
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitted Data:', formData);
+    addUser(formData);
     setFormData({ name: '', email: '', country: '', bio: '' }); 
     // Reset the form
     
@@ -107,9 +106,9 @@ function UserForm() {
           </button>
         </div>
       </form>
-      {formData.name && <p>Welcome {formData.name}!</p>}
+      {userName && <p>Welcome {userName}!</p>}
     </div>
   );
-};
+}
 
 export default UserForm;

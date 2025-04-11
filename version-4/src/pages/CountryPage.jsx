@@ -1,74 +1,71 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import importedCountryData from "../../data";
+import countryData from "../../data";
 import "../App.css"; // Import your CSS file
 
 export default function CountryPage() {
   const { country } = useParams();
   const [fetchedCountryData, setFetchedCountryData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [visitCount, setVisitCount] = useState(0);
+  const [visitCount, setVisitCount] = useState(null);
+console.log(country, "COUNTRY")
+  useEffect(() => {
+    const fetchData = () => {
+      fetch("https://restcountries.com/v3.1/all")
+        .then((response) => response.json())
+        .then((data) => {
+            const currentCountry = data.find((countryData) => countryData.name.common.toLowerCase() === country.toLowerCase());
+            setFetchedCountryData(currentCountry);
+            console.log("Current Country:", currentCountry);
+            setLoading(false);
 
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+          setFetchedCountryData(countryData);
+          
+        });
+    };
+    fetchData();
+  }, []);
+    
+  
   // this page needs to be updated to post to the server
   useEffect(() => {
-    const debounceFetch = setTimeout(() => {
-      if (country) {
-        fetch(`https://restcountries.com/v3.1/name/${country}`)
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            return res.json();
-          }})
-          .then((data) => {
-            setFetchedCountryData(data[0]); // Assign fetched country data
-            setLoading(false);
-          })
-          .catch(() => {
-            const fallback = importedCountryData.find(
-              (c) => c.name.common.toLowerCase() === country.toLowerCase()
-            );
-            setFetchedCountryData(fallback);
-            setLoading(false);
-          });
-
-        // Handle visit count
-        fetch(`http://localhost:${port}/visit-count/${country}`)
-          .then((res) => res.json())
-          .then((data) => setVisitCount(data.count))
-          .catch((error) => console.error('Error fetching visit count:', error));
-
-        fetch('http://localhost:${port}/visit-count', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ country }),
-        })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`Failed to update visit count. Status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then((data) => {
-            if (data && typeof data.count === 'number') {
-              setVisitCount(data.count);
-            } else {
-              console.error('Unexpected response format:', data);
-            }
-          })
-          .catch((error) => console.error('Error updating visit count:', error));
+    const updateClick = async (country) => {
+      console.log(`/api/country-clicked/${country}`)
+      const response = await fetch(`/api/country-clicked/${country}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(country),
+      });
       }
-    }, 500); // 500ms debounce delay
-
-    return () => clearTimeout(debounceFetch);
-  }, [country]);
     
-    return (
-      <div>
-        {!loading && <h2>Visit Count for {country}</h2>}
-        {!loading && <p>Visits: {visitCount}</p>}
-      </div>
-    );
-  }
+    
+    
+      const getCount = async (country) => {
+        const response = await fetch(`/api/clickCount/${country}`);
+        const data = await response.json();
+        console.log("Fetched visit count:", data);
+        setVisitCount(data);
+      }
+      getCount(country);
+      updateClick(country);
+      }, [country]);
+
+ useEffect(() => {
+ if (visitCount != null && fetchedCountryData != null) setLoading(false);
+ }, [visitCount, fetchedCountryData]);
+
+        // visit count pseudo code
+        // visit count needs to upodate on every visit 
+        // get"fetch" the visit count for the country display to user
+        // visit count needs to be updated"post" for the database
+        // increment the visit count by 1
+
+    
+   
+  
 
   const handleSave = () => {
     if (!fetchedCountryData) return;
@@ -124,3 +121,4 @@ export default function CountryPage() {
       </Link>
     </div>
   );
+}

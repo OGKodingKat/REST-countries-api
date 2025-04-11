@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import CountryCard from "../custom-components/CountryCard";
 import countryData from "../../data";
 
+
+
+
 export default function Home() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");

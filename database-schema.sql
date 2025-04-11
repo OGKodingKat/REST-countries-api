@@ -54,15 +54,6 @@ AND country_name = 'Japan';
 INSERT INTO saved_countries (user_id, country_name) 
 VALUES ((SELECT user_id FROM users WHERE username = 'katmarie'), 'Italy');
 
-UPDATE country_counts 
-SET save_count = save_count + 1 
-WHERE country_name = 'Italy';
-
--- If the country is not already in the country_counts table, insert it
-INSERT INTO country_counts (country_name, save_count)
-SELECT 'Italy', 1
-WHERE NOT EXISTS (SELECT 1 FROM country_counts WHERE country_name = 'Italy');
-
 SELECT users.username 
 FROM users 
 JOIN saved_countries ON users.user_id = saved_countries.user_id 

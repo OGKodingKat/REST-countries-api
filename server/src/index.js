@@ -57,7 +57,7 @@ app.get('/get-all-users', async (req, res) => {
 async function getSavedCountries() {
   const client = new Client(config);
   await client.connect();
-  const result = await client.query(`SELECT * FROM countries`);
+  const result = await client.query(`SELECT * FROM saved_countries`);
   await client.end();
 };
 
@@ -69,20 +69,29 @@ app.get('/saved-countries', async (req, res) => {
 async function addSavedCountry(countryData) {
   const client = new Client(config);
   await client.connect();
-  await client.query(`INSERT INTO countries (name, flag) VALUES ('${countryData.name}', '${countryData.flag}')`);
+  console.log(countryData);
+  await client.query(`INSERT INTO saved_countries (user_id, country_name) VALUES ('${countryData.user_id}', '${countryData.country_name}')`);
   await client.end();
 };
 
-app.post('/saved-countries', async (req, res) => {
+app.post('/add-savedcountry', async (req, res) => {
   await addSavedCountry(req.body);
   res.send('Country added');
 });
 
-// async function clickCount(country) {
-//   const client = new Client(config);
-//   await client.connect();
-//   const result = await client.query(`INSERT INTO visit_counts ()`)
-// }
+//debug this endpoint
+app.get('/clickCount/:country', async (req, res) => {
+ const count = await getClickCount(req.params.country);
+ res.send(count);
+})
+
+async function getClickCount(country) {
+  const client = new Client(config);
+  await client.connect();
+  const result = await client.query(`SELECT * FROM visit_counts WHERE country_name = $1`, [country]);
+  await client.end();
+  return result.rows[0];
+}
 
 
 app.post("/country-clicked/:country", async (req, res) => {
