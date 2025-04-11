@@ -8,64 +8,64 @@ export default function CountryPage() {
   const [fetchedCountryData, setFetchedCountryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [visitCount, setVisitCount] = useState(null);
-console.log(country, "COUNTRY")
+  console.log(country, "COUNTRY")
   useEffect(() => {
     const fetchData = () => {
       fetch("https://restcountries.com/v3.1/all")
         .then((response) => response.json())
         .then((data) => {
-            const currentCountry = data.find((countryData) => countryData.name.common.toLowerCase() === country.toLowerCase());
-            setFetchedCountryData(currentCountry);
-            console.log("Current Country:", currentCountry);
-            setLoading(false);
+          const currentCountry = data.find((countryData) => countryData.name.common.toLowerCase() === country.toLowerCase());
+          setFetchedCountryData(currentCountry);
+          console.log("Current Country:", currentCountry);
+          setLoading(false);
 
         })
         .catch((error) => {
           console.error("Error:", error.message);
           setFetchedCountryData(countryData);
-          
+
         });
     };
     fetchData();
   }, []);
-    
-  
+
+
   // this page needs to be updated to post to the server
   useEffect(() => {
     const updateClick = async (country) => {
-      console.log(`/api/country-clicked/${country}`)
-      const response = await fetch(`/api/country-clicked/${country}`, {
+      console.log(`/api/country-clicked/${country}`);
+      await fetch(`/api/country-clicked/${country}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(country),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country }),  // send as an object
       });
-      }
-    
-    
-    
-      const getCount = async (country) => {
-        const response = await fetch(`/api/clickCount/${country}`);
-        const data = await response.json();
-        console.log("Fetched visit count:", data);
-        setVisitCount(data);
-      }
-      getCount(country);
-      updateClick(country);
-      }, [country]);
+    };
 
- useEffect(() => {
- if (visitCount != null && fetchedCountryData != null) setLoading(false);
- }, [visitCount, fetchedCountryData]);
+    const getCount = async (country) => {
+      const response = await fetch(`/api/clickCount/${country}`);
+      const data = await response.json();
+      console.log("Fetched visit count:", data);
+      setVisitCount(data);
+    };
 
-        // visit count pseudo code
-        // visit count needs to upodate on every visit 
-        // get"fetch" the visit count for the country display to user
-        // visit count needs to be updated"post" for the database
-        // increment the visit count by 1
+    getCount(country);
+    updateClick(country);
+  }, [country]);
 
-    
-   
-  
+
+  useEffect(() => {
+    if (visitCount != null && fetchedCountryData != null) setLoading(false);
+  }, [visitCount, fetchedCountryData]);
+
+  // visit count pseudo code
+  // visit count needs to upodate on every visit 
+  // get"fetch" the visit count for the country display to user
+  // visit count needs to be updated"post" for the database
+  // increment the visit count by 1
+
+
+
+
 
   const handleSave = () => {
     if (!fetchedCountryData) return;
@@ -112,8 +112,9 @@ console.log(country, "COUNTRY")
         <strong>Population:</strong> {fetchedCountryData.population.toLocaleString()}
       </p>
       <p>
-        <strong>Visits:</strong> {visitCount}
+        {visitCount ? `Visited ${visitCount.count} times.` : "Loading visit count..."}
       </p>
+
 
       <button className="save-btn" onClick={handleSave}>Save</button>
       <Link to="/savedcountry">
