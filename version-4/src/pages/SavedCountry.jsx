@@ -10,6 +10,7 @@ export default function SavedCountry() {
     const fetchSavedCountries = async () => {
       try {
         const response = await fetch('http://localhost:3000/saved-countries');
+
         if (!response.ok) throw new Error('Failed to fetch saved countries');
         const data = await response.json();
         setSavedCountries(data);
@@ -33,11 +34,11 @@ export default function SavedCountry() {
       ) : (
         <ul className="saved-country-list">
           {savedCountries.map((country, index) => (
-            <li key={index} className="saved-country-item">
-              <img src={country.flag} alt={`${country.name} flag`} className="saved-country-flag" />
-              <p>{country.name}</p>
-            </li>
-          ))}
+  <li key={index} className="saved-country-item">
+    <p>{country.country_name}</p>
+  </li>
+))}
+
         </ul>
       )}
     </div>

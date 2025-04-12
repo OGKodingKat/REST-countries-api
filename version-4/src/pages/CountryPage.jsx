@@ -34,18 +34,19 @@ export default function CountryPage() {
   useEffect(() => {
     const updateClick = async (country) => {
       console.log(`/country-clicked/${country}`);
-      await fetch(`/country-clicked/${country}`, {
+      await fetch(`http://localhost:3000/country-clicked/${country}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country }),  // send as an object
+        body: JSON.stringify({ country }),
       });
+      
     };
 
     const getCount = async (country) => {
-      const response = await fetch(`/clickCount/${country}`);
+      const response = await fetch(`http://localhost:3000/clickCount/${country}`);
       const data = await response.json();
       console.log("Fetched visit count:", data);
-      setVisitCount(data);
+      setVisitCount(data.count); // Access the count property
     };
 
     getCount(country);
@@ -112,8 +113,9 @@ export default function CountryPage() {
         <strong>Population:</strong> {fetchedCountryData.population.toLocaleString()}
       </p>
       <p>
-        {visitCount ? `Visited ${visitCount.count} times.` : "Loading visit count..."}
-      </p>
+  {visitCount !== null ? `Visited ${visitCount} time${visitCount !== 1 ? "s" : ""}.` : "Loading visit count..."}
+</p>
+
 
 
       <button className="save-btn" onClick={handleSave}>Save</button>
