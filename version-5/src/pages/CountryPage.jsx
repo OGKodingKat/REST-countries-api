@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import countryData from "../../data";
 import "../App.css"; // Import your CSS file
 
+const API_URL = "https://rest-countries-api-5q0p.onrender.com";
+
 export default function CountryPage() {
   const { country } = useParams();
   const [fetchedCountryData, setFetchedCountryData] = useState(null);

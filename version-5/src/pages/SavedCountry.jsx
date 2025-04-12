@@ -2,6 +2,8 @@ import React from 'react';
 import UserForm from '../custom-components/UserForm';
 import { useState, useEffect } from 'react';
 
+const API_URL = "https://rest-countries-api-5q0p.onrender.com";
+
 //need to change this to post to the server
 export default function SavedCountry() {
   const [savedCountries, setSavedCountries] = useState([]);
