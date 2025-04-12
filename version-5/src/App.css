@@ -1,0 +1,95 @@
+ul {
+  display: flex;
+  justify-content: space-between;
+}
+input ,textarea{
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid gray !important;
+}
+
+.card {
+  background-color: white;
+  color: black;
+  
+}
+body {
+  background-color: white;
+  color: black;
+}
+.cardwrp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+form {
+  margin: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 40%;
+  gap: 1rem;
+  input {
+    padding: 0.5rem;
+  }
+  textarea {
+    padding: 0.5rem;
+  }
+  h2 {
+    font-family: "nunito-sans-large";
+    font-weight: bolder;
+  }
+  .button-wrapper {
+    width: 30%;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 2rem;
+
+    input {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      align-items: center;
+      background-color: white;
+    }
+  }
+}
+
+.country-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.country-flag {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+}
+
+h2 {
+  margin: 10px 0;
+}
+
+p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+button {
+  margin: 10px;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.save-btn {
+  background-color: blue;
+  color: white;
+}
+
+.back-btn {
+  background-color: gray;
+  color: white;
+  text-decoration: none;
+}
