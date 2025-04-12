@@ -33,8 +33,8 @@ export default function CountryPage() {
   // this page needs to be updated to post to the server
   useEffect(() => {
     const updateClick = async (country) => {
-      console.log(`/api/country-clicked/${country}`);
-      await fetch(`/api/country-clicked/${country}`, {
+      console.log(`/country-clicked/${country}`);
+      await fetch(`/country-clicked/${country}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ country }),  // send as an object
@@ -42,7 +42,7 @@ export default function CountryPage() {
     };
 
     const getCount = async (country) => {
-      const response = await fetch(`/api/clickCount/${country}`);
+      const response = await fetch(`/clickCount/${country}`);
       const data = await response.json();
       console.log("Fetched visit count:", data);
       setVisitCount(data);
