@@ -5,16 +5,7 @@ import SavedCountry from './pages/SavedCountry.jsx';
 import CountryPage from './pages/CountryPage.jsx';
 import UserForm from './custom-components/UserForm.jsx';
 import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCwDxtdjMyDcsqLAO3GyJioIgO2Gjk7wsE",
-  authDomain: "country-api-3043a.firebaseapp.com",
-  projectId: "country-api-3043a",
-  storageBucket: "country-api-3043a.firebasestorage.app",
-  messagingSenderId: "297463227591",
-  appId: "1:297463227591:web:96fe6d47c94fbad3c68ae2",
-  measurementId: "G-HB0HKML5WR"
-};
+import { firebaseConfig } from './firebase.js';
 
 
 function App() {
