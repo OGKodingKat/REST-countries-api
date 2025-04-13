@@ -1,33 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 function UserForm() {
-  const [formData, setFormData] = useState(() => {
-    // Retrieve initial data from local storage if available
-    const savedData = localStorage.getItem('userFormData');
-    return savedData
-      ? JSON.parse(savedData)
-      : { name: '', email: '', country: '', bio: '' };
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    country: '',
+    bio: ''
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevFormData) => {
-      const updatedFormData = { ...prevFormData, [name]: value };
-      localStorage.setItem('userFormData', JSON.stringify(updatedFormData)); 
-      // Update local storage
-      return updatedFormData;
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitted Data:', formData);
-    setFormData({ name: '', email: '', country: '', bio: '' }); 
-    // Reset the form
-    
+
+    try {
+      await addDoc(collection(db, 'users'), formData);
+      console.log('User data added to Firestore!');
+      setFormData({ name: '', email: '', country: '', bio: '' });
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
   };
+
   const handleBack = () => {
-    window.history.back(); // Go back to the previous page
+    window.history.back();
   };
 
   return (

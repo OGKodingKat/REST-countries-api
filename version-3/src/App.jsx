@@ -1,14 +1,11 @@
-import './App.css';
+import './App.css'
 import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import SavedCountry from './pages/SavedCountry.jsx';
 import CountryPage from './pages/CountryPage.jsx';
 import UserForm from './custom-components/UserForm.jsx';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCwDxtdjMyDcsqLAO3GyJioIgO2Gjk7wsE",
   authDomain: "country-api-3043a.firebaseapp.com",
@@ -19,14 +16,11 @@ const firebaseConfig = {
   measurementId: "G-HB0HKML5WR"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Firestore instance
-const auth = getAuth(app); // Authentication instance
 
 function App() {
-  console.log("Firebase App Initialized:", app);
 
+  const app = initializeApp(firebaseConfig);
+console.log(app);
   return (
     <div>
       <nav>
@@ -45,7 +39,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/" element={<UserForm />} />
         <Route path="/savedcountry" element={<SavedCountry />} />
-        <Route path="/countrypage/:country" element={<CountryPage />} />
+        <Route path="/countrypage/:country" element ={<CountryPage />} />
       </Routes>
     </div>
   );
