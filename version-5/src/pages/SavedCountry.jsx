@@ -2,7 +2,6 @@ import React from 'react';
 import UserForm from '../custom-components/UserForm';
 import { useState, useEffect } from 'react';
 
-
 //need to change this to post to the server
 export default function SavedCountry() {
   const [savedCountries, setSavedCountries] = useState([]);
@@ -10,7 +9,7 @@ export default function SavedCountry() {
   useEffect(() => {
     const fetchSavedCountries = async () => {
       try {
-        const response = await fetch(`/api/saved-countries`);
+        const response = await fetch('http://localhost:3000/saved-countries');
 
         if (!response.ok) throw new Error('Failed to fetch saved countries');
         const data = await response.json();
