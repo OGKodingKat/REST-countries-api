@@ -6,7 +6,7 @@ import cors from 'cors';
 const { Client } = pg;
 const app = express();
 // Default port for the server
-const defaultPort = 3000;
+const defaultPort = 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -77,6 +77,12 @@ app.post("/country-clicked/:country", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("API is running!");
 });
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'delightful-cactus-01fc41.netlify.app'],
+  methods: ['GET', 'POST'],
+}));
+
 
 
 const port = process.env.PORT || defaultPort;

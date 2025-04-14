@@ -14,11 +14,11 @@ function UserForm() {
 
   const addUser = async (userData) => {
     try {
-      const response = await fetch('/api/add-user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
+const response = await fetch(`${API_URL}/api/add-user`, { 
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(userData)
+});
       if (!response.ok) {
         throw new Error('Failed to add user');
       }
@@ -29,7 +29,7 @@ function UserForm() {
 
   const getUser = async () => {
     try {
-      const response = await fetch('/api/get-all-users');
+      const response = await fetch(`${API_URL}/api/get-all-users`)
       const data = await response.json();
       if (data.length > 0) {
         const lastUser = data[data.length - 1];

@@ -11,7 +11,7 @@ export default function SavedCountry() {
   useEffect(() => {
     const fetchSavedCountries = async () => {
       try {
-        const response = await fetch('/api/saved-countries');
+        const response = await fetch(`${API_URL}/api/saved-countries`);
 
         if (!response.ok) throw new Error('Failed to fetch saved countries');
         const data = await response.json();
