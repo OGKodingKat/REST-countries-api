@@ -5,7 +5,8 @@ import cors from 'cors';
 
 const { Client } = pg;
 const app = express();
-const port = 3000;
+// Default port for the server
+const defaultPort = 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -72,7 +73,9 @@ app.post("/country-clicked/:country", async (req, res) => {
   await client.end();
   res.json({ count: result.rows[0].count });
 });
-
+const port = process.env.PORT || defaultPort;
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
+
+
