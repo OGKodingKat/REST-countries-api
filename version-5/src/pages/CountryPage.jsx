@@ -3,7 +3,6 @@ import { useParams, Link } from "react-router-dom";
 import countryData from "../../data";
 import "../App.css"; // Import your CSS file
 
-
 export default function CountryPage() {
   const { country } = useParams();
   const [fetchedCountryData, setFetchedCountryData] = useState(null);
@@ -35,7 +34,7 @@ export default function CountryPage() {
   useEffect(() => {
     const updateClick = async (country) => {
       console.log(`/country-clicked/${country}`);
-      await fetch(`/api/country-clicked/${country}`, {
+      await fetch(`http://localhost:3000/country-clicked/${country}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ country }),
@@ -44,7 +43,7 @@ export default function CountryPage() {
     };
 
     const getCount = async (country) => {
-      const response = await fetch(`/api/clickCount/${country}`);
+      const response = await fetch(`http://localhost:3000/clickCount/${country}`);
       const data = await response.json();
       console.log("Fetched visit count:", data);
       setVisitCount(data.count); // Access the count property
@@ -69,29 +68,33 @@ export default function CountryPage() {
 
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!fetchedCountryData) return;
-
-    const savedCountries = JSON.parse(localStorage.getItem("savedCountries")) || [];
-
-    // Check if the country is already saved to avoid duplicates
-    if (!savedCountries.some((c) => c.name === fetchedCountryData.name.common)) {
-      const updatedCountries = [
-        ...savedCountries,
-        {
-          name: fetchedCountryData.name.common,
-          flag: fetchedCountryData.flags.svg,
-          capital: fetchedCountryData.capital?.[0] || "N/A",
-          region: fetchedCountryData.region,
-          population: fetchedCountryData.population,
+  
+    const user_id = 1; // 🔁 Replace this with your actual user's ID
+  
+    try {
+      const response = await fetch('http://localhost:3000/add-savedcountry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ];
-      localStorage.setItem("savedCountries", JSON.stringify(updatedCountries));
+        body: JSON.stringify({
+          user_id,
+          country_name: fetchedCountryData.name.common,
+        }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to save country');
+  
       alert(`${fetchedCountryData.name.common} has been saved!`);
-    } else {
-      alert(`${fetchedCountryData.name.common} is already saved.`);
+    } catch (error) {
+      console.error("Error saving country:", error);
+      alert("There was a problem saving this country.");
     }
   };
+  
+  
 
   if (loading) return <p>Loading...</p>;
   if (!fetchedCountryData) return <p>Country not found.</p>;
