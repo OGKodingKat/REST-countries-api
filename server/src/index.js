@@ -1,7 +1,15 @@
 import express from 'express';
 import pg from 'pg';
-import config from './config.js';
 import cors from 'cors';
+
+let config = {
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.DATABASE_PORT,
+  ssl: true,
+}
 
 const { Client } = pg;
 const app = express();
