@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 
-const API_URL = "https://rest-countries-api-5q0p.onrender.com";
 function UserForm() {
   const [userName, setUserName] = useState(null);
   const [formVisible, setFormVisible] = useState(true);
@@ -14,7 +13,7 @@ function UserForm() {
 
   const addUser = async (userData) => {
     try {
-const response = await fetch(`${API_URL}/api/add-user`, { 
+const response = await fetch(`/api/add-user`, { 
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(userData)
@@ -29,7 +28,7 @@ const response = await fetch(`${API_URL}/api/add-user`, {
 
   const getUser = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/get-all-users`)
+      const response = await fetch(`/api/get-all-users`)
       const data = await response.json();
       if (data.length > 0) {
         const lastUser = data[data.length - 1];

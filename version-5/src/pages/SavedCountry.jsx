@@ -2,7 +2,6 @@ import React from 'react';
 import UserForm from '../custom-components/UserForm';
 import { useState, useEffect } from 'react';
 
-const API_URL = "https://rest-countries-api-5q0p.onrender.com";
 
 //need to change this to post to the server
 export default function SavedCountry() {
@@ -11,7 +10,7 @@ export default function SavedCountry() {
   useEffect(() => {
     const fetchSavedCountries = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/saved-countries`);
+        const response = await fetch(`/api/saved-countries`);
 
         if (!response.ok) throw new Error('Failed to fetch saved countries');
         const data = await response.json();
