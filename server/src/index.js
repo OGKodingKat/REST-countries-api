@@ -73,6 +73,12 @@ app.post("/country-clicked/:country", async (req, res) => {
   await client.end();
   res.json({ count: result.rows[0].count });
 });
+
+app.get("/", (req, res) => {
+  res.send("API is running!");
+});
+
+
 const port = process.env.PORT || defaultPort;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
