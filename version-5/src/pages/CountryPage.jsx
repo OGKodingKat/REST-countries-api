@@ -34,7 +34,7 @@ export default function CountryPage() {
   useEffect(() => {
     const updateClick = async (country) => {
       console.log(`/country-clicked/${country}`);
-      await fetch(`http://localhost:3000/country-clicked/${country}`, {
+      await fetch(`/api/country-clicked/${country}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ country }),
@@ -43,7 +43,7 @@ export default function CountryPage() {
     };
 
     const getCount = async (country) => {
-      const response = await fetch(`http://localhost:3000/clickCount/${country}`);
+      const response = await fetch(`/api/clickCount/${country}`);
       const data = await response.json();
       console.log("Fetched visit count:", data);
       setVisitCount(data.count); // Access the count property
@@ -74,7 +74,7 @@ export default function CountryPage() {
     const user_id = 1; // 🔁 Replace this with your actual user's ID
   
     try {
-      const response = await fetch('http://localhost:3000/add-savedcountry', {
+      const response = await fetch('/api/add-savedcountry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

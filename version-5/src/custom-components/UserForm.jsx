@@ -47,7 +47,7 @@ function UserForm() {
   // NEW FUNCTION
   const fetchSavedCountries = async (user_id) => {
     try {
-      const res = await fetch(`/saved-countries?user_id=${user_id}`);
+      const res = await fetch(`/api/saved-countries?user_id=${user_id}`);
       const countries = await res.json();
       setSavedCountries(countries);
     } catch (error) {
